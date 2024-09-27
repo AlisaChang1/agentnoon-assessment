@@ -7,15 +7,22 @@ let data
 let root = {}
 
 async function processData() {
-    data = await d3.csv('/data1.csv');
+    data = await d3.csv('/data.csv');
     let tree = await d3.stratify()
-        .id((d) => d['Employee Id'])
-        .parentId((d) => d['Manager'])(data);
+    .id((d) => d['Employee Id'])
+    .parentId((d) => d['Manager'])(data);
     reorgTree(tree)
     root = d3.hierarchy(tree);
+
+    
     getDescendentCount(root)
     calculateCosts(root)
-    console.log(root)
+    
+    let app = createApp(App)
+    app.config.globalProperties.$people = root;
+    app.mount('#app');
+
+
 }
 
 function reorgTree(root) {
@@ -34,11 +41,15 @@ function reorgTree(root) {
  */
 function getDescendentCount(node) {
     if (node['Descendent Count']) return node['Descendent Count']
+    let count = 0
     if (!node.children) return 0
-    node.descendants().forEach(x => {
-        node['Descendent Count'] = node.descendants().length
-        getDescendentCount(x)
-    })
+    count = node.children.reduce((acc, child) => {
+        return acc + getDescendentCount(child) + 1;
+    }, 0);
+
+    node['Descendent Count'] = count
+
+    return count
 }
 
 /**
@@ -62,10 +73,6 @@ function calculateCosts(root) {
     })
 }
 
-processData().then(() => {
-    let app = createApp(App)
-    app.config.globalProperties.$people = root;
-    app.mount('#app');
-  });
+processData()
 
 
