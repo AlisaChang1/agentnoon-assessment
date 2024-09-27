@@ -1,17 +1,22 @@
 <template>
   <div class="person-node">
-    <CircularContainer 
-      :key="people['Employee Id']" 
-      :person="people"
-      :level="0"/>
+    <!-- <li v-for="person in people" :key="person.id"> -->
+      <!-- <li> -->
+      <CircularContainer 
+          :key="people.id"
+          :person="people"
+          :level="0"/>
+    <!-- </li> -->
   </div>
 </template>
 
 <script>
 import CircularContainer from './CircularContainer.vue';
+// import EmployeeNode from './EmployeeNode.vue';
 export default {
   components: {
-    CircularContainer
+    CircularContainer,
+    // EmployeeNode
   },
   computed: {
     people() {
@@ -28,7 +33,7 @@ export default {
       this.expanded = !this.expanded;
     },
     toggleNode(node) {
-      node.isExpanded = !node.isExpanded; // Toggles node expansion
+      node.data.isExpanded = !node.data.isExpanded; // Toggles node expansion
     },
   },
 };
