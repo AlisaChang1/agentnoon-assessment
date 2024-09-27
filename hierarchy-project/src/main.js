@@ -4,15 +4,26 @@ import './assets/tailwind.css'
 import * as d3 from 'd3'
 
 let data
-let tree = {}
-let descendents = {}
+let root = {}
 
 async function processData() {
     data = await d3.csv('/data1.csv');
-    tree = await d3.stratify()
+    let tree = await d3.stratify()
         .id((d) => d['Employee Id'])
         .parentId((d) => d['Manager'])(data);
-    console.log(calculateCosts(tree))
+    reorgTree(tree)
+    root = d3.hierarchy(tree);
+    getDescendentCount(root)
+    calculateCosts(root)
+    console.log(root)
+}
+
+function reorgTree(root) {
+    root.each(node => {
+        Object.keys(node.data).forEach(key => {
+            node[key] = node.data[key];
+        });
+    });
 }
 
 /**
@@ -22,16 +33,12 @@ async function processData() {
  * @returns {int} the total number of descendents for the given node
  */
 function getDescendentCount(node) {
-    if (descendents[node.id]) return descendents[node.id]
+    if (node['Descendent Count']) return node['Descendent Count']
     if (!node.children) return 0
-    const total = node.children.length + 
-                    node.children.reduce((acc, child) => {
-                        return acc + getDescendentCount(child)
-                    }, 0)
-
-    descendents[node.id] = total
-
-    return total
+    node.descendants().forEach(x => {
+        node['Descendent Count'] = node.descendants().length
+        getDescendentCount(x)
+    })
 }
 
 /**
@@ -41,39 +48,23 @@ function getDescendentCount(node) {
  * @param {Node} node The node in which calculations are made for
  * @returns {} The values of all cost calculations (management costs, IC cost, the total cost, and the management cost ratio)
  */
-function calculateCosts(node) {
-    let costs = {
-        managementCost: 0,
-        icCost: 0,
-        total: 0,
-        managementCostRatio: 0
-    }
+function calculateCosts(root) {
+    root.sum(d => (d.children && d.children.length > 0) ? d.data['Salary'].substring(1).replace(/,/g, '') : 0)
+    root.each(node => {
+        node['Management Cost'] = node.value
+    })
 
-    /**
-     * Calculates the management costs, IC costs and total cost of a given node
-     * 
-     * @param {Node} node The node provided for the calculations
-     */
-    function calculateAllCosts(node) {
-        let cost = parseFloat(node.data['Salary'].substring(1).replace(/,/g, ''))
-        if (node.children) {
-            costs.managementCost += cost
-            node.children.forEach(x => calculateAllCosts(x))
-        } else {
-            costs.icCost += cost
-        }
-        costs.total += cost
-    }
-
-    calculateAllCosts(node)
-    costs.managementCostRatio = costs.icCost / costs.managementCost
-
-    return costs
+    root.sum(d => (!d.children) ? d.data['Salary'].substring(1).replace(/,/g, '') : 0)
+    root.each(node => {
+        node['IC Cost'] = node.value
+        node['Total Cost'] = node['IC Cost'] + node['Management Cost']
+        node['Management Cost Ratio'] = node['IC Cost'] / node['Management Cost']
+    })
 }
 
 processData().then(() => {
     let app = createApp(App)
-    app.config.globalProperties.$people = data;
+    app.config.globalProperties.$people = root;
     app.mount('#app');
   });
 

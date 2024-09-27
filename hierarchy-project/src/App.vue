@@ -1,39 +1,19 @@
-<!-- <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
-</template>
-
-<script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
-</script> -->
-
 <template>
   <div class="person-node">
-    <!-- <div @click="toggle" class="cursor-pointer">
-      {{ person.name }} - Descendants: {{ getDescendantCount(person) }}
-    </div>
-    <div v-if="expanded" class="ml-4">
-      <PersonNode v-for="subordinate in person.subordinates" :key="subordinate.id" :person="subordinate" />
-    </div> -->
-    <li v-for="person in people" :key="person['Employee Id']">
-      <div>
-        {{ person['Name'] }} (Salary: {{ person['Salary'] }})
-      </div>
-    </li>
+    <CircularContainer 
+      :key="people['Employee Id']" 
+      :person="people"
+      :level="0"/>
   </div>
 </template>
 
 <script>
+import CircularContainer from './CircularContainer.vue';
 export default {
+  components: {
+    CircularContainer
+  },
   computed: {
-    // Accessing the global $people property via this.$people
     people() {
       return this.$people;
     },
@@ -47,8 +27,8 @@ export default {
     toggle() {
       this.expanded = !this.expanded;
     },
-    getDescendantCount(person) {
-      return this.$emit('descendant-count', person);
+    toggleNode(node) {
+      node.isExpanded = !node.isExpanded; // Toggles node expansion
     },
   },
 };
@@ -63,4 +43,10 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+/* .person-node {
+  height: fit-content;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+} */
 </style>
