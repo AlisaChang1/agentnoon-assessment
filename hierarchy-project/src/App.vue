@@ -1,6 +1,7 @@
 <template>
   <div class="person-node">
-      <CircularContainer 
+    <!-- Renders the root node -->
+      <EmployeeCard 
           :key="filteredPeople.id"
           :person="filteredPeople"
           :level="0"/>
@@ -8,10 +9,10 @@
 </template>
 
 <script>
-import CircularContainer from './CircularContainer.vue';
+import EmployeeCard from './EmployeeCard.vue';
 export default {
   components: {
-    CircularContainer,
+    EmployeeCard,
   },
   computed: {
     filteredPeople() {
