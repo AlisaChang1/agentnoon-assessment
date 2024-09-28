@@ -29,19 +29,20 @@ The project is coded in JavaScript, Vue and Tailwind. All data parsing and calcu
 ### Main.js
 `root`: Object data structure that stores the root of the tree
 General structure of the tree:
-Node
-    Descendent Count
-    Management Cost
-    IC Cost
-    Total Cost
-    Management Cost Ratio
-    children (array of Nodes)
-    data
-        Employee Id
-        Name
-        .
-        .
-        .
+
+Node <br/>
+    &nbsp;&nbsp; Descendent Count <br/>
+    &nbsp;&nbsp; Management Cost <br/>
+    &nbsp;&nbsp; IC Cost <br/>
+    &nbsp;&nbsp; Total Cost <br/>
+    &nbsp;&nbsp; Management Cost Ratio <br/>
+    &nbsp;&nbsp; children (array of Nodes) <br/>
+    &nbsp;&nbsp; data <br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Employee Id <br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Name <br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; . <br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; . <br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; . <br/>
 
 
 `procesData()`: the function that takes in a downloaded csv (`data.csv`) and converts the information into a tree using `d3`. Given the tree the function calls `getDescendentCount` and `calculateCosts`to store the calculation information in the tree. Then the app is created once all the dated is calculated
