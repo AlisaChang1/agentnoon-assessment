@@ -61,15 +61,16 @@ Node
 ## Descision Making / Thought Process
 - All calculations and data processing should be handled separately from the Vue components to make the code easier to understand and read
 - The decision to do a vertical hierarchy UI was to:
-    - create more clarity and readability for a consumer of the site to understand their data better
-    - allows for multiple nodes and levels to be opened at once
-    - much more scalable for larger data sets to see data more clearly
-    - indentations clearly show the different levels in hierarchy and lineage without needing to trace lines
-    - can easily add more information to nodes to display more info without cluttering the UI
+    - Create more clarity and readability for a consumer of the site to understand their data better
+    - Allows for multiple nodes and levels to be opened at once
+    - Much more scalable for larger data sets to see data more clearly
+    - Indentations clearly show the different levels in hierarchy and lineage without needing to trace lines
+    - Can easily add more information to nodes to display more info without cluttering the UI
 
 ## Future Improvements
-- allow user to upload a csv file
-- search bar to find a specific person
-- filter to find employees with certain properties and would display a list of those users
-- backend and database to properly store the data with proper protocols to send and receive data
+- Allow user to upload a csv file
+- Search bar to find a specific person
+- Filter to find employees with certain properties and would display a list of those users
+- Backend and database to properly store the data with proper protocols to send and receive data
 
+**note:** to test other data sets add the csv file to the public folder and change the file name in `main.js` (in the processData() function line 13) to match the file name of the imported csv file
